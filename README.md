@@ -1,107 +1,79 @@
-# FoodAdvisor - Strapi Demo
+# Objetivo
 
-![FoodAdvisor](./foodadvisor.png)
+O objetivo deste projeto é configurar uma aplicação web utilizando o Strapi e o PostgreSQL e implantá-la em um cluster Kubernetes.
 
-Welcome to FoodAdvisor, the official Strapi demo application.
-This repository contains the following:
+## Serviço
 
-- Strapi project with existing Content-types and data (`/api`)
-- Next.js client ready to fetch the content of the Strapi application (`/client`)
+O serviço a ser implementado consistirá em uma aplicação web simples utilizando o Strapi como framework. O Strapi é uma plataforma de conteúdo headless que permite a criação de APIs e aplicações web baseadas em conteúdo. O PostgreSQL será utilizado como banco de dados para armazenar os dados da aplicação.
 
-[![Open in Gitpod](https://camo.githubusercontent.com/76e60919474807718793857d8eb615e7a50b18b04050577e5a35c19421f260a3/68747470733a2f2f676974706f642e696f2f627574746f6e2f6f70656e2d696e2d676974706f642e737667)](http://gitpod.io/#https://github.com/strapi/foodadvisor)
+Para este fim, utilizaremos a aplicação Food Advisor disponível em [https://github.com/strapi/foodadvisor.git](https://github.com/strapi/foodadvisor.git), uma aplicação de demonstração implementada no Strapi. A abordagem envolve clonar este repositório, construir a imagem Docker, criar o Helm chart e, posteriormente, implantar a aplicação em um cluster Kubernetes.
 
-## Get started
+## Recursos do Kubernetes
 
-You can get started with this project locally on your machine by following the instructions below or you can [request a private instance on our website](https://strapi.io/demo).
+Os recursos necessários no Kubernetes para o Strapi incluem:
 
-You can also [fork](https://github.com/strapi/foodadvisor/fork) this repository and deploy it on [Strapi Cloud](https://cloud.strapi.io)
+- Dois pods: um para a API e outro para o cliente
+- Dois serviços: um para a API e outro para o cliente
+- Um secret para armazenar as credenciais de conexão da API com o banco de dados
+- Dois deployments: um para a API e outro para o cliente
+- Dois ingress: um para a API e outro para o cliente
 
-## Prerequisites
+Para o PostgreSQL, será utilizado o chart pronto disponível no repositório da Bitnami: [https://github.com/bitnami/charts/tree/main/bitnami/postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
 
-Be sure to have the correct env variables for each part:
+## Passo a Passo para Implementação do Projeto
 
-- Strapi (example in `./api/.env.example`):
-  - `STRAPI_ADMIN_CLIENT_URL=<url-of-nextjs>`
-  - `STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=<a-random-token>`
+### Preparação do Ambiente
 
-- Next.js (already in `./client/.env.development`):
-  - `NEXT_PUBLIC_API_URL=<url-of-strapi>`
-  - `PREVIEW_SECRET=<the-same-random-token-as-for-strapi>`
+1. Instale e inicie o Minikube:
+   ```bash
+   minikube start
+   ```
+2. Verifique se o Minikube está rodando corretamente:
+    ```bash
+    minikube status
+    ```
+3. Se esta for a primeira vez que você está utilizando o Ingress no Minikube, habilite o complemento:
+    ```bash
+    minikube addons enable ingress
+    ```
 
-## 1. Clone FoodAdvisor
+### Implantação do Serviço
 
-- Clone the repository by running the following command:
+1. Clone este repositório:
+   ```bash
+   git clone https://github.com/MG10exe/Projeto-Helm-FoodAdvisor
+   ```
+2. Entre na pasta do Strapi Food Advisor:
+    ```bash
+    cd projetotal/strapi-foodadvisor
+    ```
+3. Atualize as dependências do Helm:
+    ```bash
+    helm dependency update
+    ```
+4. Retorne ao diretório raiz:
+    ```bash
+    cd ..
+    ```
+5. Instale o chart do Food Advisor:
+    ```bash
+    helm install foodadvisor-chart ./foodadvisor-chart
+    ```
+6. Verifique se a aplicação foi implantada com sucesso:
+    ```bash
+    kubectl get all
+    ```
 
-```
-git clone https://github.com/strapi/foodadvisor.git
-```
+### Teste do Serviço
 
-- Navigate to your project folder by running `cd foodadvisor`.
+1. Para testar o serviço, execute os seguintes comandos:
+   ```bash
+   kubectl port-forward svc/ingress-nginx-controller 8889:80 -n ingress-nginx
+   ```
 
-## 2. Start Strapi
+    ```bash
+    kubectl port-forward svc/foodadvisor-backend 1337:80
+    ```
+2. Acesse o endereço http://foodadvisor.backend:8889/ para verificar o funcionamento do Strapi e criar a conta de administrador.
 
-Navigate to your `./my-projects/foodadvisor/api` folder by running `cd api` from your command line.
-
-- Run the following command in your `./foodadvisor/api` folder:
-
-```
-yarn && yarn seed && yarn develop
-```
-
-This will install the dependencies, fill your application with data and run your server. You can run these commands separately.
-
-#### Credentials
-
-- Super Admin:
-  - email: admin@strapidemo.com
-  - password: welcomeToStrapi123
-
-- Editor
-  - email: editor@strapidemo.com
-  - password: welcomeToStrapi123
-
-- Author
-  - email: author@strapidemo.com
-  - password: welcomeToStrapi123
-
-## 3. Start Next.js
-
-Navigate to your `./my-projects/foodadvisor/client` folder by running `cd client` from your command line.
-
-- Run the following command in your `./foodadvisor/client` folder
-
-```
-yarn && yarn dev
-```
-
-This will install the dependencies, and run your server. You can run these commands separately.
-
-## Features overview
-
-### User
-
-<br />
-
-**An intuitive, minimal editor** The editor allows you to pull in dynamic blocks of content. It’s 100% open-source, and it’s fully extensible.<br />
-**Media Library** Upload images, video or any files and crop and optimize their sizes, without quality loss.<br />
-**Flexible content management** Build any type of category, section, format or flow to adapt to your needs. <br />
-**Sort and Filter** Built-in sorting and filtering: you can manage thousands of entries without effort.<br />
-**User-friendly interface** The most user-friendly open-source interface on the market.<br />
-**SEO optimized** Easily manage your SEO metadata with a repeatable field and use our Media Library to add captions, notes, and custom filenames to optimize the SEO of media assets.<br /><br />
-
-### Global
-
-<br />
-
-[Customizable API](https://strapi.io/features/customizable-api): Automatically build out the schema, models, controllers for your API from the editor. Get REST or GraphQL API out of the box without writing a single line of code.<br />
-[Media Library](https://strapi.io/features/media-library): The media library allows you to store your images, videos and files in your Strapi admin panel with many ways to visualize and manage them.<br />
-[Role-Based Access Control (RBAC)](https://strapi.io/features/custom-roles-and-permissions): Role-Based Access Control is a feature available in the Administration Panel settings that let your team members have access rights only to the information they need.<br />
-[Internationalization (i18n)](https://strapi.io/features/internationalization): Internationalization (i18n) lets you create many content versions, also called locales, in different languages and for different countries.<br />
-[Audit Logs](https://strapi.io/blog/reasons-and-best-practices-for-using-audit-logs-in-your-application)The Audit Logs section provides a searchable and filterable display of all activities performed by users of the Strapi application<br />
-[Data transfer](https://strapi.io/blog/importing-exporting-and-transferring-data-with-the-strapi-cli) Streams your data from one Strapi instance to another Strapi instance.<br />
-[Review Worfklows](https://docs.strapi.io/user-docs/settings/review-workflows) Create and manage any desired review stages for your content, enabling your team to collaborate in the content creation flow from draft to publication. <br />
-
-
-## Resources
-
-[Docs](https://docs.strapi.io) • [Demo](https://strapi.io/demo) • [Next.js Starter](https://github.com/strapi/nextjs-corporate-starter) • [Forum](https://forum.strapi.io/) • [Discord](https://discord.strapi.io) • [Youtube](https://www.youtube.com/c/Strapi/featured) • [Try Enterprise Edition](https://strapi.io/enterprise) • [Strapi Design System](https://design-system.strapi.io/) • [Marketplace](https://market.strapi.io/) • [Clou Free Trial](https://cloud.strapi.io) 
+3. Acesse http://localhost:1337/admin para criar a conta de administrador, informando os dados solicitados. Após isso, o painel do Strapi será exibido.
