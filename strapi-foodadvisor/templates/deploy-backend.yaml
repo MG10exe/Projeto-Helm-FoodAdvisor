@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.foodAdvisorApi.deploy.name }}
+spec:
+  replicas: {{ .Values.foodAdvisorApi.deploy.replicas }}
+  selector:
+    matchLabels: {{ .Values.foodAdvisorApi.labels | toYaml | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ .Values.foodAdvisorApi.labels | toYaml | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.foodAdvisorApi.deploy.name }}
+        image: {{ .Values.foodAdvisorApi.deploy.image.repository }}:{{ .Values.foodAdvisorApi.deploy.image.tag }}
+        imagePullPolicy: {{ .Values.foodAdvisorApi.deploy.image.pullPolicy }}
+        ports:
+        - containerPort: 1337
+        env: {{- toYaml .Values.foodAdvisorApi.extraApiEnvs | nindent 12 }}
