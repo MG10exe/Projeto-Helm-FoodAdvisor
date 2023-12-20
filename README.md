@@ -45,7 +45,7 @@ Para o PostgreSQL, será utilizado o chart pronto disponível no repositório da
    ```
 2. Entre na pasta do Strapi Food Advisor:
     ```bash
-    cd projetotal/strapi-foodadvisor
+    cd Projeto-Helm-FoodAdvisor/strapi-foodadvisor/
     ```
 3. Atualize as dependências do Helm:
     ```bash
@@ -57,7 +57,7 @@ Para o PostgreSQL, será utilizado o chart pronto disponível no repositório da
     ```
 5. Instale o chart do Food Advisor:
     ```bash
-    helm install foodadvisor-chart ./foodadvisor-chart
+    helm install strapi-foodadvisor ./strapi-foodadvisor
     ```
 6. Verifique se a aplicação foi implantada com sucesso:
     ```bash
