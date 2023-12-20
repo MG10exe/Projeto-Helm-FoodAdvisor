@@ -74,6 +74,16 @@ Para o PostgreSQL, será utilizado o chart pronto disponível no repositório da
     ```bash
     kubectl port-forward svc/foodadvisor-backend 1337:80
     ```
-2. Acesse o endereço http://foodadvisor.backend:8889/ para verificar o funcionamento do Strapi e criar a conta de administrador.
+2. Acesse o endereço http://foodadvisor.backend:8889/ para verificar o funcionamento da api do Strapi.
 
 3. Acesse http://localhost:1337/admin para criar a conta de administrador, informando os dados solicitados. Após isso, o painel do Strapi será exibido.
+
+### Prints
+
+![shot-2023-12-20_09-16-59](https://github.com/MG10exe/Projeto-Helm-FoodAdvisor/assets/61914401/bd9c6c21-a534-48cb-81c1-95a3bd4c0db3)
+
+![shot-2023-12-20_09-18-35](https://github.com/MG10exe/Projeto-Helm-FoodAdvisor/assets/61914401/c21badf7-db29-4c1e-8aa9-7f91c5d88981)
+
+![shot-2023-12-20_09-23-30](https://github.com/MG10exe/Projeto-Helm-FoodAdvisor/assets/61914401/3088575d-6734-4c9d-b0ac-6c6afecbc46c)
+
+![shot-2023-12-20_09-24-58](https://github.com/MG10exe/Projeto-Helm-FoodAdvisor/assets/61914401/06caf247-067a-4eba-a8bb-0919d96381ce)
